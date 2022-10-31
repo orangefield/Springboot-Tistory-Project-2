@@ -4,11 +4,18 @@
     <div class="my_auth_box">
         <div class="my_auth_form_box">
             <div class="my_auth_form_box_title">Tistory</div>
-            <form action="/join" method="POST">
-                <input class="my_auth_form_box_input" type="text" name="username" placeholder="유저네임" maxlength="20" />
-                <input class="my_auth_form_box_input" type="password" name="password" placeholder="비밀번호"
+            <!-- 에러 박스 시작 -->
+            <div class="my_error_box my_hidden">
+
+            </div>
+            <!-- 에러 박스 끝 -->
+            <form action="/join" method="POST" onsubmit="return validation()">
+                <input id="username" class="my_auth_form_box_input" type="text" name="username" placeholder="유저네임"
                     maxlength="20" />
-                <input class="my_auth_form_box_input" type="password" name="" placeholder="비밀번호 확인" maxlength="20" />
+                <input id="password" class="my_auth_form_box_input" type="password" name="password" placeholder="비밀번호"
+                    maxlength="20" />
+                <input id="same-password" class="my_auth_form_box_input" type="password" name="" placeholder="비밀번호 확인"
+                    maxlength="20" />
                 <input class="my_auth_form_box_input" type="email" name="email" placeholder="이메일" maxlength="60" />
                 <button type="submit" class="my_secondary_btn">회원가입</button>
             </form>
@@ -18,6 +25,43 @@
             </div>
         </div>
     </div>
+    <br />
 </div>
+
+
+<script>
+    let valid = {
+        state: false,
+        password: "",
+        email: ""
+    }
+
+    $("#same-password").keyup((event) => {
+        passwordSameCheck();
+    });
+
+    function validation() {
+        if (valid.state === false) {
+            // valid.password 내용을 에러박스 안에 채워 넣기
+            $(".my_error_box").html(`${valid.password}<br/>${valid.email}<br/>`);
+            $(".my_error_box").removeClass("my_hidden");
+        }
+        return valid.state;
+    }
+    function passwordSameCheck() {
+        // 1. password 값 찾기
+        let password = $("#password").val();
+        // 2. same-password 값 찾기
+        let samePassword = $("#same-password").val();
+        // 3. 두 개의 값을 비교하기
+        if (password == samePassword) {
+            valid.password = "비밀번호가 동일합니다";
+            valid.state = true;
+        } else {
+            valid.password = "비밀번호가 동일하지 않습니다.";
+            valid.state = false;
+        }
+    }
+</script>
 
 {{>/layout/footer}}
