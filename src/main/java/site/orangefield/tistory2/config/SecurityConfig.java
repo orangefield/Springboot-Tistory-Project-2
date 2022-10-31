@@ -7,6 +7,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import site.orangefield.tistory2.handler.LoginSuccessHandler;
+
 @EnableWebSecurity
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -30,7 +32,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/login-form")
                 .loginProcessingUrl("/login") // login 프로세스를 탄다
                 // .failureHandler(null)
-                // .successHandler(null)
-                .defaultSuccessUrl("/");
+                .successHandler(new LoginSuccessHandler());
     }
 }
