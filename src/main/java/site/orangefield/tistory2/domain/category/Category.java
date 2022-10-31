@@ -17,8 +17,14 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import site.orangefield.tistory2.domain.user.User;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
 @EntityListeners(AuditingEntityListener.class)
 @Entity
 @Table(uniqueConstraints = {
