@@ -17,4 +17,8 @@ public class PostRespDto {
 
     private Page<Post> posts;
     private List<Category> categories;
+    private Integer userId;
+    private Integer prev;
+    private Integer next;
+    private List<Integer> pageNumbers;
 }

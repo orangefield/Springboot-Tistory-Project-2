@@ -34,6 +34,18 @@
         {{/postRespDto.posts}}
         <!-- 게시글 끝 -->
 
+        <!-- 페이징 시작 -->
+        <div class="my_paging">
+
+            <a href="/user/{{postRespDto.userId}}/post?page={{postRespDto.prev}}">이전</a>
+            {{#postRespDto.pageNumbers}}
+            <a href="/user/{{postRespDto.userId}}/post?page={{.}}">{{.}}</a>
+            {{/postRespDto.pageNumbers}}
+            <a href="/user/{{postRespDto.userId}}/post?page={{postRespDto.next}}">다음</a>
+
+        </div>
+        <!-- 페이징 끝 -->
+
     </div>
 
 </div>
