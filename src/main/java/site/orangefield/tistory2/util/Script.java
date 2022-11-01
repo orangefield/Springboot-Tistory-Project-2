@@ -1,6 +1,15 @@
 package site.orangefield.tistory2.util;
 
 public class Script {
+
+    public static String href(String url) {
+        StringBuffer sb = new StringBuffer();
+        sb.append("<script>");
+        sb.append("location.href='" + url + "';");
+        sb.append("</script>");
+        return sb.toString();
+    }
+
     public static String href(String url, String msg) {
         StringBuffer sb = new StringBuffer();
         sb.append("<script>");
