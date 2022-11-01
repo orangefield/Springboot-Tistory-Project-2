@@ -2,6 +2,8 @@ package site.orangefield.tistory2.web;
 
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -44,11 +46,19 @@ public class PostController {
     }
 
     @GetMapping("/user/{id}/post")
-    public String postList(@PathVariable Integer id, @AuthenticationPrincipal LoginUser loginUser, Model model) {
+    public String postList(Integer categoryId, @PathVariable Integer id, @AuthenticationPrincipal LoginUser loginUser,
+            Model model, @PageableDefault(size = 3) Pageable pageable) {
 
         // SELECT * FROM category WHERE userId = :id
         // 카테고리도 같이 가져가기
-        PostRespDto postRespDto = postService.게시글목록보기(id);
+        PostRespDto postRespDto = null;
+
+        if (categoryId == null) {
+            postRespDto = postService.게시글목록보기(id, pageable);
+        } else {
+            postRespDto = postService.게시글카테고리별보기(id, categoryId, pageable);
+        }
+
         model.addAttribute("postRespDto", postRespDto);
 
         return "/post/list";

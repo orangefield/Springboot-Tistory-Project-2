@@ -1,6 +1,7 @@
 package site.orangefield.tistory2.domain.post;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -40,7 +41,7 @@ public class Post {
     @Column(nullable = false)
     private String content;
 
-    @Column(length = 200, nullable = false)
+    @Column(length = 200, nullable = true)
     private String thumbnail;
 
     @JoinColumn(name = "userId")
@@ -56,4 +57,9 @@ public class Post {
     @LastModifiedDate // update 할 때 동작
     private LocalDateTime updateDate;
 
+    // yyyy-MM-dd HH:mm:ss
+    public String getFormatCreateDate() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        return createDate.format(formatter);
+    }
 }
