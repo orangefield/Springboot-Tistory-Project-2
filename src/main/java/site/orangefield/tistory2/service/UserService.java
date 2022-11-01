@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 import site.orangefield.tistory2.domain.user.User;
 import site.orangefield.tistory2.domain.user.UserRepository;
 import site.orangefield.tistory2.handler.ex.CustomException;
-import site.orangefield.tistory2.util.email.EmailUtil;
+// import site.orangefield.tistory2.util.email.EmailUtil;
 import site.orangefield.tistory2.web.dto.user.PasswordResetReqDto;
 
 @RequiredArgsConstructor
@@ -19,7 +19,7 @@ public class UserService {
     // DI
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    private final EmailUtil emailUtil;
+    // private final EmailUtil emailUtil;
 
     @Transactional
     public void 패스워드초기화(PasswordResetReqDto passwordResetReqDto) {
