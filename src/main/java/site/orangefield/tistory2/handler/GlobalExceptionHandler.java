@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import site.orangefield.tistory2.handler.ex.CustomApiException;
 import site.orangefield.tistory2.handler.ex.CustomException;
+import site.orangefield.tistory2.util.Script;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -18,11 +19,6 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(CustomException.class)
     public String htmlException(Exception e) { // Get(a태그), Post(form태그) 요청 (일반적 요청)
-        StringBuilder sb = new StringBuilder();
-        sb.append("<script>");
-        sb.append("alert('" + e.getMessage() + "');");
-        sb.append("history.back();");
-        sb.append("</script>");
-        return sb.toString();
+        return Script.back(e.getMessage());
     }
 }
