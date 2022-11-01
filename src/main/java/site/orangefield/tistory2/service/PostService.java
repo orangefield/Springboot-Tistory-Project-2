@@ -1,9 +1,11 @@
 package site.orangefield.tistory2.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -12,12 +14,17 @@ import site.orangefield.tistory2.domain.category.CategoryRepository;
 import site.orangefield.tistory2.domain.post.Post;
 import site.orangefield.tistory2.domain.post.PostRepository;
 import site.orangefield.tistory2.domain.user.User;
+import site.orangefield.tistory2.handler.ex.CustomException;
+import site.orangefield.tistory2.util.UtilFileUpload;
 import site.orangefield.tistory2.web.dto.post.PostRespDto;
 import site.orangefield.tistory2.web.dto.post.PostWriteReqDto;
 
 @RequiredArgsConstructor
 @Service
 public class PostService {
+
+    @Value("${file.path}")
+    private String uploadFolder;
 
     private final PostRepository postRepository;
     private final CategoryRepository categoryRepository;
@@ -27,13 +34,19 @@ public class PostService {
     }
 
     @Transactional
-    public void 게시글쓰기(PostWriteReqDto postWriteReqDto) {
-        // 1번 이미지 파일 저장 (UUID로 변경해서 저장)
-        // 2번 이미지 파일명을 Post 오브젝트에 thumbnail 옮기기
-        // 3번 title, content도 Post 오브젝트에 옮기고
-        // 4번 userId도 Post 오브젝트에 옮기기
-        // 5번 categoryId도 Post 오브젝트에 옮기기
-        // 6번 save하면 끝
+    public void 게시글쓰기(PostWriteReqDto postWriteReqDto, User principal) {
+
+        // 1. UUID로 파일쓰고 경로 리턴 받기
+        String thumbnail = UtilFileUpload.write(uploadFolder, postWriteReqDto.getThumbnailFile());
+        // 2. 카테고리 있는지 확인
+        Optional<Category> categoryOp = categoryRepository.findById(postWriteReqDto.getCategoryId());
+        // 3. post DB에 저장
+        if (categoryOp.isPresent()) {
+            Post post = postWriteReqDto.toEntity(thumbnail, principal, categoryOp.get());
+            postRepository.save(post);
+        } else {
+            throw new CustomException("해당 카테고리가 존재하지 않습니다.");
+        }
     }
 
     public PostRespDto 게시글목록보기(int userId) {

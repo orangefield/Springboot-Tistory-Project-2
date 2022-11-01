@@ -9,6 +9,9 @@ import org.springframework.web.multipart.MultipartFile;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import site.orangefield.tistory2.domain.category.Category;
+import site.orangefield.tistory2.domain.post.Post;
+import site.orangefield.tistory2.domain.user.User;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -26,4 +29,16 @@ public class PostWriteReqDto {
 
     @NotNull
     private String content; // 컨텐트 null 허용X
+
+    public Post toEntity(String thumbnail, User principal, Category category) {
+        Post post = new Post();
+
+        post.setTitle(title);
+        post.setContent(content);
+        post.setThumbnail(thumbnail);
+        post.setUser(principal);
+        post.setCategory(category);
+
+        return post;
+    }
 }
