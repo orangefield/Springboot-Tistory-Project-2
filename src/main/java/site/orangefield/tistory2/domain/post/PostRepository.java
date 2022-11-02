@@ -1,5 +1,7 @@
 package site.orangefield.tistory2.domain.post;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -19,4 +21,8 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
     @Modifying // INSERT, UPDATE, DELETE
     @Query(value = "INSERT INTO post(categoryId, title, content, userId, thumbnail, createDate, updateDate) VALUES(:categoryId, :title, :content, :userId, :thumbnail, now(), now())", nativeQuery = true)
     void mSave(Integer categoryId, Integer userId, String title, String content, String thumbnail);
+
+    // Love 기능 구현되면 쿼리 변경해야한다
+    @Query(value = "SELECT * FROM post ORDER BY id DESC LIMIT 0,9", nativeQuery = true)
+    List<Post> mFindByPopular();
 }
