@@ -18,7 +18,6 @@ import site.orangefield.tistory2.domain.category.CategoryRepository;
 import site.orangefield.tistory2.domain.post.Post;
 import site.orangefield.tistory2.domain.post.PostRepository;
 import site.orangefield.tistory2.domain.user.User;
-import site.orangefield.tistory2.domain.user.UserRepository;
 import site.orangefield.tistory2.domain.visit.Visit;
 import site.orangefield.tistory2.domain.visit.VisitRepository;
 import site.orangefield.tistory2.handler.ex.CustomApiException;
@@ -132,6 +131,9 @@ public class PostService {
             pageNumbers.add(i);
         }
 
+        // 방문자 카운터 증가
+        Visit visitEntity = visitIncrease(pageOwnerId);
+
         PostRespDto postRespDto = new PostRespDto(
                 postsEntity,
                 categoriesEntity,
@@ -139,10 +141,7 @@ public class PostService {
                 postsEntity.getNumber() - 1,
                 postsEntity.getNumber() + 1,
                 pageNumbers,
-                0L);
-
-        // 방문자 카운터 증가
-        visitIncrease(pageOwnerId);
+                visitEntity.getTotalCount());
 
         return postRespDto;
     }
@@ -156,6 +155,9 @@ public class PostService {
             pageNumbers.add(i);
         }
 
+        // 방문자 카운터 증가
+        Visit visitEntity = visitIncrease(pageOwnerId);
+
         PostRespDto postRespDto = new PostRespDto(
                 postsEntity,
                 categoriesEntity,
@@ -163,10 +165,7 @@ public class PostService {
                 postsEntity.getNumber() - 1,
                 postsEntity.getNumber() + 1,
                 pageNumbers,
-                0L);
-
-        // 방문자 카운터 증가
-        visitIncrease(pageOwnerId);
+                visitEntity.getTotalCount());
 
         return postRespDto;
     }
@@ -197,12 +196,14 @@ public class PostService {
     }
 
     // 방문자 카운터 증가 메서드
-    private void visitIncrease(Integer pageOwnerId) {
+    private Visit visitIncrease(Integer pageOwnerId) {
         Optional<Visit> visitOp = visitRepository.findById(pageOwnerId);
+
         if (visitOp.isPresent()) {
             Visit visitEntity = visitOp.get();
             Long totalCount = visitEntity.getTotalCount();
             visitEntity.setTotalCount(totalCount + 1);
+            return visitEntity;
         } else {
             log.error("겁나 심각", "회원가입할 때 Visit이 안 만들어지는 심각한 오류가 있습니다.");
             throw new CustomException("일시적 문제가 생겼습니다. 관리자에게 문의해주세요.");
