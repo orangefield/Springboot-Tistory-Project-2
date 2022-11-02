@@ -21,4 +21,5 @@ public class PostRespDto {
     private Integer prev;
     private Integer next;
     private List<Integer> pageNumbers;
+    private Long totalCount;
 }
