@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import site.orangefield.tistory2.domain.user.User;
 import site.orangefield.tistory2.domain.user.UserRepository;
+import site.orangefield.tistory2.domain.visit.Visit;
+import site.orangefield.tistory2.domain.visit.VisitRepository;
 import site.orangefield.tistory2.handler.ex.CustomException;
 // import site.orangefield.tistory2.util.email.EmailUtil;
 import site.orangefield.tistory2.web.dto.user.PasswordResetReqDto;
@@ -17,6 +19,7 @@ import site.orangefield.tistory2.web.dto.user.PasswordResetReqDto;
 @Service // IoC 등록
 public class UserService {
     // DI
+    private final VisitRepository visitRepository;
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     // private final EmailUtil emailUtil;
@@ -44,11 +47,17 @@ public class UserService {
 
     @Transactional
     public void 회원가입(User user) {
+        // 1. save 한 번
         String rawPassword = user.getPassword(); // 1234
         String encPassword = bCryptPasswordEncoder.encode(rawPassword); // 해시된 비번
         user.setPassword(encPassword);
+        User userEntity = userRepository.save(user);
 
-        userRepository.save(user);
+        // 2. save 두 번
+        Visit visit = new Visit();
+        visit.setTotalCount(0L);
+        visit.setUser(userEntity);
+        visitRepository.save(visit);
     }
 
     public boolean 유저네임중복체크(String username) {
