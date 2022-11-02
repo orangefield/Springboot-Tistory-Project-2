@@ -21,6 +21,7 @@ import site.orangefield.tistory2.domain.post.Post;
 import site.orangefield.tistory2.domain.user.User;
 import site.orangefield.tistory2.handler.ex.CustomException;
 import site.orangefield.tistory2.service.PostService;
+import site.orangefield.tistory2.web.dto.post.PostDetailRespDto;
 import site.orangefield.tistory2.web.dto.post.PostRespDto;
 import site.orangefield.tistory2.web.dto.post.PostWriteReqDto;
 
@@ -42,8 +43,15 @@ public class PostController {
     @GetMapping("/post/{id}")
     public String detail(@PathVariable Integer id, Model model, @AuthenticationPrincipal LoginUser loginUser) {
 
-        Post postEntity = postService.게시글상세보기(id);
-        model.addAttribute("post", postEntity);
+        PostDetailRespDto postDetailRespDto = null;
+
+        if (loginUser == null) {
+            postDetailRespDto = postService.게시글상세보기(id);
+        } else {
+            postDetailRespDto = postService.게시글상세보기(id, loginUser.getUser());
+        }
+
+        model.addAttribute("data", postDetailRespDto);
 
         return "/post/detail";
     }
