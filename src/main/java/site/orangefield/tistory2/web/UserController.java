@@ -2,15 +2,20 @@ package site.orangefield.tistory2.web;
 
 import javax.validation.Valid;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
+import site.orangefield.tistory2.config.auth.LoginUser;
 import site.orangefield.tistory2.service.UserService;
 import site.orangefield.tistory2.util.UtilValid;
 import site.orangefield.tistory2.web.dto.user.JoinReqDto;
@@ -21,6 +26,17 @@ import site.orangefield.tistory2.web.dto.user.PasswordResetReqDto;
 public class UserController {
     // DI
     private final UserService userService;
+
+    @Value("${file.path}")
+    private String uploadFolder;
+
+    @PutMapping("/s/api/user/{id}/profile-img")
+    public ResponseEntity<?> profileImgUpdate(@AuthenticationPrincipal LoginUser loginUser,
+            MultipartFile profileImgFile) {
+
+        userService.프로파일이미지변경(loginUser.getUser(), profileImgFile);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
     @GetMapping("/login-form")
     public String loginForm() {
