@@ -32,7 +32,7 @@ public class UserController {
     @Value("${file.path}")
     private String uploadFolder;
 
-    @PutMapping("/s/api/user/{id}/profile-img")
+    @PutMapping("/s/api/user/profile-img")
     public ResponseEntity<?> profileImgUpdate(@AuthenticationPrincipal LoginUser loginUser,
             MultipartFile profileImgFile) {
 
