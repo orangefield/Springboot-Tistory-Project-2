@@ -7,8 +7,15 @@
         <div class="my_auth_form_box">
             <!-- 프로필 사진 선택 시작 -->
             <div class="d-flex justify-content-center">
+                {{#principal}}
+                {{#profileImg}}
+                <img src="/upload/{{profileImg}}" class="my_profile_rounded_img_btn_lg" id="profile-img-btn-lg">
+                {{/profileImg}}
+                {{^profileImg}}
                 <img src="https://i1.sndcdn.com/avatars-000373392764-zp0p80-t500x500.jpg"
                     class="my_profile_rounded_img_btn_lg" id="profile-img-btn-lg">
+                {{/profileImg}}
+                {{/principal}}
                 <form id="fileForm">
                     <input type="file" class="my_hidden" id="profile-img-input" name="profileImgFile" />
                 </form>
@@ -31,10 +38,6 @@
                     required readonly />
                 <button type="submit" class="my_secondary_btn">회원정보 수정</button>
             </form>
-            <div class="my_auth_form_box_link">
-                <div><a href="/login-form">로그인</a></div>
-                <div><a href="/user/password-reset-form">비밀번호 찾기</a></div>
-            </div>
         </div>
     </div>
     <br />
