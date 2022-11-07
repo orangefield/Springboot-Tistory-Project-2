@@ -1,26 +1,57 @@
-function postLikeClick(id) {
-    let isLike = $(`#heart-${id}`).hasClass("my_fake_like");
-    if (isLike) {
-        postUnLike(id);
+function postLikeClick(postId) {
+    let principalId = $("#principal-id").val();
+    //console.log(principalId);
+
+    if (principalId == undefined) {
+        alert("로그인이 필요합니다");
+        location.href = "/login-form";
+        return;
+    }
+
+    let isLove = $(`#my-heart`).hasClass("my_fake_like");
+    
+    if (isLove) {
+        postUnLike(postId);
     } else {
-        postLike(id);
+        postLike(postId);
     }
 }
 
-function postLike(id) {
-    // fetch();
-    $(`#heart-${id}`).addClass("my_fake_like");
-    $(`#heart-${id}`).removeClass("my_fake_un_like");
-    $(`#heart-${id}`).removeClass("far");
-    $(`#heart-${id}`).addClass("fa-solid");
+async function postLike(postId) {
+    let response = await fetch(`/s/api/post/${postId}/love`, {
+        method: 'POST'
+    });
+
+    let responseParse = await response.json();
+
+    if (response.status == 201) {
+        $(`#my-heart`).addClass("my_fake_like");
+        $(`#my-heart`).removeClass("my_fake_un_like");
+        $(`#my-heart`).removeClass("far");
+        $(`#my-heart`).addClass("fa-solid");
+
+        $("#my-loveId").val(responseParse.loveId); // 중요!
+    } else {
+        alert("통신실패");
+    }
 }
 
-function postUnLike(id) {
-    // fetch();
-    $(`#heart-${id}`).addClass("my_fake_un_like");
-    $(`#heart-${id}`).removeClass("my_fake_like");
-    $(`#heart-${id}`).removeClass("fa-solid");
-    $(`#heart-${id}`).addClass("far");
+async function postUnLike(postId) {
+    let loveId = $("#my-loveId").val();
+    //console.log(loveId);
+
+    let response = await fetch(`/s/api/post/${postId}/love/${loveId}`, {
+        method: 'DELETE'
+    });
+
+    if (response.status == 200) {
+        $(`#my-heart`).addClass("my_fake_un_like");
+        $(`#my-heart`).removeClass("my_fake_like");
+        $(`#my-heart`).removeClass("fa-solid");
+        $(`#my-heart`).addClass("far");
+    } else {
+        alert("통신실패");
+    }
 }
 
 // 게시글 삭제, 권한체크 후 삭제 /s/api/post/postId

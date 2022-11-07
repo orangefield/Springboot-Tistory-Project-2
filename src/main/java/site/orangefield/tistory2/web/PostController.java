@@ -37,10 +37,10 @@ public class PostController {
         return new ResponseEntity<>(dto, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/s/api/post/{postId}/love")
-    public ResponseEntity<?> unLove(@PathVariable Integer postId, @AuthenticationPrincipal LoginUser loginUser) {
+    @DeleteMapping("/s/api/post/{postId}/love/{loveId}")
+    public ResponseEntity<?> unLove(@PathVariable Integer loveId, @AuthenticationPrincipal LoginUser loginUser) {
         // (로그인한 유저의 userId) vs (Love 테이블의 userId)
-        postService.좋아요취소(postId, loginUser.getUser());
+        postService.좋아요취소(loveId, loginUser.getUser());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
