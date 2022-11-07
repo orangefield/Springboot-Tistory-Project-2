@@ -17,10 +17,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import lombok.RequiredArgsConstructor;
 import site.orangefield.tistory2.config.auth.LoginUser;
 import site.orangefield.tistory2.domain.category.Category;
-import site.orangefield.tistory2.domain.love.Love;
 import site.orangefield.tistory2.domain.user.User;
 import site.orangefield.tistory2.handler.ex.CustomException;
 import site.orangefield.tistory2.service.PostService;
+import site.orangefield.tistory2.web.dto.love.LoveRespDto;
 import site.orangefield.tistory2.web.dto.post.PostDetailRespDto;
 import site.orangefield.tistory2.web.dto.post.PostRespDto;
 import site.orangefield.tistory2.web.dto.post.PostWriteReqDto;
@@ -33,8 +33,8 @@ public class PostController {
 
     @PostMapping("/s/api/post/{postId}/love")
     public ResponseEntity<?> love(@PathVariable Integer postId, @AuthenticationPrincipal LoginUser loginUser) {
-        Love loveEntity = postService.좋아요(postId, loginUser.getUser());
-        return new ResponseEntity<>(loveEntity, HttpStatus.CREATED);
+        LoveRespDto dto = postService.좋아요(postId, loginUser.getUser());
+        return new ResponseEntity<>(dto, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/s/api/post/{postId}/love")

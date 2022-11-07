@@ -27,6 +27,8 @@ import site.orangefield.tistory2.domain.visit.VisitRepository;
 import site.orangefield.tistory2.handler.ex.CustomApiException;
 import site.orangefield.tistory2.handler.ex.CustomException;
 import site.orangefield.tistory2.util.UtilFileUpload;
+import site.orangefield.tistory2.web.dto.love.LoveRespDto;
+import site.orangefield.tistory2.web.dto.love.LoveRespDto.PostDto;
 import site.orangefield.tistory2.web.dto.post.PostDetailRespDto;
 import site.orangefield.tistory2.web.dto.post.PostRespDto;
 import site.orangefield.tistory2.web.dto.post.PostWriteReqDto;
@@ -46,14 +48,26 @@ public class PostService {
     private final EntityManager em; // IoC 컨테이너에서 가져옴
 
     @Transactional
-    public Love 좋아요(Integer postId, User principal) {
+    public LoveRespDto 좋아요(Integer postId, User principal) {
 
         Post postEntity = postFindById(postId);
 
         Love love = new Love();
         love.setUser(principal);
         love.setPost(postEntity);
-        return loveRepository.save(love);
+
+        Love loveEntity = loveRepository.save(love);
+        // (1) DTO 클래스 생성
+        // (2) ModelMapper 호출(loveEntity, 내가만든DTO.class)
+        LoveRespDto loveRespDto = new LoveRespDto();
+        loveRespDto.setLoveId(loveEntity.getId());
+
+        PostDto postDto = loveRespDto.new PostDto();
+        postDto.setPostId(postEntity.getId());
+        postDto.setTitle(postEntity.getTitle());
+        loveRespDto.setPost(postDto);
+
+        return loveRespDto;
     }
 
     @Transactional
