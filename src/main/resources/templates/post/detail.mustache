@@ -18,6 +18,17 @@
     <!-- 게시글 콘텐츠 끝 -->
     <br />
 
+    <!-- 좋아요, 작성일 시작 -->
+    <div class="my_post_info_box d-flex">
+        <div class="my_post_info">
+            <i class="fa-solid fa-heart my_fake_like my_mr_sm_1" id="heart-{{data.post.id}}"
+                onclick="postLikeClick('{{data.post.id}}')"></i>
+            by <b>{{data.post.user.username}}</b> <span class="my_text_body_sm">{{data.post.formatCreateDate}}</span>
+        </div>
+    </div>
+    <br />
+    <!-- 좋아요, 작성일 끝 -->
+
     {{#data.isPageOwner}}
     <div>
         <a class="btn btn-outline-success" href="#">수정</a>
