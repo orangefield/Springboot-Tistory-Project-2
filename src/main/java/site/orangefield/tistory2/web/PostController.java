@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import lombok.RequiredArgsConstructor;
 import site.orangefield.tistory2.config.auth.LoginUser;
 import site.orangefield.tistory2.domain.category.Category;
-import site.orangefield.tistory2.domain.post.Post;
 import site.orangefield.tistory2.domain.user.User;
 import site.orangefield.tistory2.handler.ex.CustomException;
 import site.orangefield.tistory2.service.PostService;
@@ -30,6 +29,16 @@ import site.orangefield.tistory2.web.dto.post.PostWriteReqDto;
 public class PostController {
 
     private final PostService postService;
+
+    @PostMapping("/s/api/post/{id}/love")
+    public ResponseEntity<?> love(@PathVariable Integer id, @AuthenticationPrincipal LoginUser loginUser) {
+        return null;
+    }
+
+    @DeleteMapping("/s/api/post/{id}/love")
+    public ResponseEntity<?> unLove(@PathVariable Integer id, @AuthenticationPrincipal LoginUser loginUser) {
+        return null;
+    }
 
     @DeleteMapping("/s/api/post/{id}")
     public ResponseEntity<?> postDelete(@PathVariable Integer id, @AuthenticationPrincipal LoginUser loginUser) {

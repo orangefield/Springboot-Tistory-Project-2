@@ -11,5 +11,6 @@ import site.orangefield.tistory2.domain.post.Post;
 public class PostDetailRespDto {
 
     private Post post;
-    private boolean isPageOwner; // getter가 변수명 그대로 나옴
+    private boolean isPageOwner; // getter는 isPageOwner(){}, setter는 setPageOwner(){}
+    private boolean isLove; // 좋아요를 했으면 true
 }
