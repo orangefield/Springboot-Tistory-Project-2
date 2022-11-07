@@ -45,11 +45,29 @@ public class PostService {
     private final LoveRepository loveRepository;
     private final EntityManager em; // IoC 컨테이너에서 가져옴
 
+    @Transactional
+    public Love 좋아요(Integer postId, User principal) {
+
+        Post postEntity = postFindById(postId);
+
+        Love love = new Love();
+        love.setUser(principal);
+        love.setPost(postEntity);
+        return loveRepository.save(love);
+    }
+
+    @Transactional
+    public void 좋아요취소(Integer loveId, User principal) {
+        // 권한체크
+        loveFindById(loveId);
+        loveRepository.deleteById(loveId);
+    }
+
     @Transactional(rollbackFor = CustomApiException.class)
     public void 게시글삭제(Integer id, User principal) {
 
         // 게시글 확인
-        Post postEntity = basicFindById(id);
+        Post postEntity = postFindById(id);
 
         // 권한 체크
         if (authCheck(postEntity.getUser().getId(), principal.getId())) {
@@ -66,7 +84,7 @@ public class PostService {
         PostDetailRespDto postDetailRespDto = new PostDetailRespDto();
 
         // 게시글 확인
-        Post postEntity = basicFindById(id);
+        Post postEntity = postFindById(id);
 
         // 방문자 카운터 증가
         visitIncrease(postEntity.getUser().getId());
@@ -92,7 +110,7 @@ public class PostService {
         PostDetailRespDto postDetailRespDto = new PostDetailRespDto();
 
         // 게시글 확인
-        Post postEntity = basicFindById(id);
+        Post postEntity = postFindById(id);
 
         // 권한 체크
         boolean isAuth = authCheck(postEntity.getUser().getId(), principal.getId());
@@ -188,8 +206,19 @@ public class PostService {
         return postRespDto;
     }
 
+    // 좋아요 한 건 찾기 메서드
+    private Love loveFindById(Integer loveId) {
+        Optional<Love> loveOp = loveRepository.findById(loveId);
+        if (loveOp.isPresent()) {
+            Love loveEntity = loveOp.get();
+            return loveEntity;
+        } else {
+            throw new CustomApiException("해당 좋아요가 존재하지 않습니다");
+        }
+    }
+
     // 게시글 한 건 찾기 메서드
-    private Post basicFindById(Integer postId) {
+    private Post postFindById(Integer postId) {
         Optional<Post> postOp = postRepository.findById(postId);
 
         if (postOp.isPresent()) {
