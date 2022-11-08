@@ -73,7 +73,7 @@ public class UserService {
     } // 더티체킹 (update)
 
     @Transactional
-    public void 회원가입(User user) {
+    public User 회원가입(User user) {
         // 1. save 한 번
         String rawPassword = user.getPassword(); // 1234
         String encPassword = bCryptPasswordEncoder.encode(rawPassword); // 해시된 비번
@@ -85,6 +85,8 @@ public class UserService {
         visit.setTotalCount(0L);
         visit.setUser(userEntity);
         visitRepository.save(visit);
+
+        return userEntity;
     }
 
     public boolean 유저네임중복체크(String username) {

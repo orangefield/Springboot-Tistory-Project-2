@@ -49,9 +49,3 @@ spring:
 
 file:
   path: C:/upload/     
-
-
-logging:
-  level:
-    '[org.springframework.web]': DEBUG
-    '[org.hibernate]': DEBUG
