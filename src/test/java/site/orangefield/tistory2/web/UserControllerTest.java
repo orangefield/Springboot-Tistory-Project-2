@@ -1,6 +1,6 @@
 package site.orangefield.tistory2.web;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.doNothing;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.mock.web.MockMultipartFile;
@@ -31,6 +32,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import site.orangefield.tistory2.domain.user.User;
+import site.orangefield.tistory2.util.email.EmailUtil;
 
 // RestController 테스트는 통합테스트로 하면 편하다(TestRestTemplate)
 // Controller 테스트는 MockMvc가 필요(model값 검증을 할 수 있다)
@@ -42,6 +44,9 @@ import site.orangefield.tistory2.domain.user.User;
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 // @AutoConfigureMockMvc
 public class UserControllerTest {
+
+    @MockBean
+    private EmailUtil emailUtil;
 
     // @Autowired
     private MockMvc mockMvc;
@@ -166,15 +171,25 @@ public class UserControllerTest {
 
     }
 
+    // https://velog.io/@leejisoo/SpringBootTest-%EC%A0%95%EB%A6%AC
     @Test
     public void passwordReset_테스트() throws Exception {
 
-        // assertEquals("1", "1");
+        // given
+        String username = "ares";
+        String email = "jsw_777@naver.com";
+
+        // Mock 객체가 아닌 실제 객체(EmailUtil)는 stub이 안된다
+        // Mock를 할때 Mockito 환경이 아니라 Springboot IoC에 Mock가 되어야 한다(@MockBean 사용)
+        doNothing().when(emailUtil).sendEmail("", "", "");
+
+        // when
         ResultActions resultActions = mockMvc.perform(
                 MockMvcRequestBuilders.post("/user/password-reset")
-                        .param("username", "ares")
-                        .param("email", "jsw_777@naver.com"));
+                        .param("username", username)
+                        .param("email", email));
 
+        // then
         resultActions.andExpect(MockMvcResultMatchers.status().is3xxRedirection());
     }
 
