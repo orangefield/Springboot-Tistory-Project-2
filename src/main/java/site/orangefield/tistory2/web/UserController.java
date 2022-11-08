@@ -29,6 +29,8 @@ public class UserController {
     private final UserService userService;
     private final HttpSession session;
 
+    private static final String TAG = "UserController : ";
+
     @Value("${file.path}")
     private String uploadFolder;
 
