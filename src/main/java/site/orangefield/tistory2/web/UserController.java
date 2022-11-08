@@ -16,12 +16,14 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import site.orangefield.tistory2.config.auth.LoginUser;
 import site.orangefield.tistory2.service.UserService;
 import site.orangefield.tistory2.util.UtilValid;
 import site.orangefield.tistory2.web.dto.user.JoinReqDto;
 import site.orangefield.tistory2.web.dto.user.PasswordResetReqDto;
 
+@Slf4j
 @RequiredArgsConstructor
 @Controller
 public class UserController {

@@ -21,7 +21,7 @@ public class DBInitializer {
             User principal = User.builder()
                     .username("ares")
                     .password("1234")
-                    .email("ares@naver.com")
+                    .email("jsw_777@naver.com")
                     .build();
 
             userRepository.save(principal);

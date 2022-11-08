@@ -107,3 +107,6 @@ ORDER BY p.id DESC
 LIMIT 0, 3;
 -- LIMIT (0*3), 3;
 ```
+
+### 시큐리티 테스트 참고
+- https://tecoble.techcourse.co.kr/post/2020-09-30-spring-security-test/
