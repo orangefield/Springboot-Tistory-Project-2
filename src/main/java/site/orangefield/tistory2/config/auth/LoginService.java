@@ -2,6 +2,7 @@ package site.orangefield.tistory2.config.auth;
 
 import java.util.Optional;
 
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -11,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import site.orangefield.tistory2.domain.user.User;
 import site.orangefield.tistory2.domain.user.UserRepository;
 
+@Profile("dev")
 @RequiredArgsConstructor
 @Service
 public class LoginService implements UserDetailsService {
