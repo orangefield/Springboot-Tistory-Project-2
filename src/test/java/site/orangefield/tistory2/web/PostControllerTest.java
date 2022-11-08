@@ -1,17 +1,20 @@
 package site.orangefield.tistory2.web;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import java.io.File;
+import java.nio.file.Files;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
@@ -42,6 +45,12 @@ public class PostControllerTest {
         @Test
         public void write_테스트() throws Exception {
                 // given
+                File file = new File(
+                                "C:\\green_workspace\\orangefield01\\tistory2\\src\\main\\resources\\static\\images\\babamba.jpg");
+
+                MockMultipartFile image = new MockMultipartFile("profileImgFile", "babamba.jpg", "image/jpeg",
+                                Files.readAllBytes(file.toPath()));
+
                 PostWriteReqDto postWriteReqDto = PostWriteReqDto.builder()
                                 .categoryId(1) // 이거 터짐
                                 .title("스프링")
@@ -50,7 +59,8 @@ public class PostControllerTest {
 
                 // when
                 ResultActions resultActions = mockMvc.perform(
-                                post("/s/post")
+                                MockMvcRequestBuilders.multipart("/s/post")
+                                                .file((MockMultipartFile) postWriteReqDto.getThumbnailFile())
                                                 .param("title", postWriteReqDto.getTitle())
                                                 .param("content", postWriteReqDto.getContent())
                                                 .param("categoryId", postWriteReqDto.getCategoryId() + ""));
