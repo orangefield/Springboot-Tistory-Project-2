@@ -53,8 +53,7 @@ public class PostControllerTest {
                                 post("/s/post")
                                                 .param("title", postWriteReqDto.getTitle())
                                                 .param("content", postWriteReqDto.getContent())
-                                                .param("categoryId", postWriteReqDto.getCategoryId() + "")
-                                                .param("thumbnailFile", ""));
+                                                .param("categoryId", postWriteReqDto.getCategoryId() + ""));
 
                 // then
                 resultActions

@@ -160,7 +160,7 @@ public class PostService {
 
         // 1. UUID로 파일쓰고 경로 리턴 받기
         String thumbnail = null;
-        if (!postWriteReqDto.getThumbnailFile().isEmpty()) {
+        if (postWriteReqDto.getThumbnailFile() != null) {
             thumbnail = UtilFileUpload.write(uploadFolder, postWriteReqDto.getThumbnailFile());
         }
         // 2. 카테고리 있는지 확인
